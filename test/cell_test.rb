@@ -62,4 +62,10 @@ class CellTest < Minitest::Test
     assert_equal '.', @cell.render
   end
 
+  def test_hitting_a_cell_with_a_ship_renders_H
+    @cell.place_ship(@cruiser)
+    @cell.fire_upon
+    assert_equal "H", @cell.render
+  end
+
 end

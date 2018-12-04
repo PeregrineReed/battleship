@@ -36,6 +36,8 @@ class Cell
       'S'
     elsif @fired_upon && empty?
       'M'
+    elsif @fired_upon && self.ship != nil
+      'H'
     else
       '.'
     end
