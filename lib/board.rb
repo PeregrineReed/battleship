@@ -27,4 +27,13 @@ class Board
       cell.coordinate == coordinate
     end
   end
+  
+  def valid_placement?(ship, coordinates)
+    if coordinates.count == ship.length && ship.class == Ship
+      true
+    else
+      false
+    end
+  end
+
 end
