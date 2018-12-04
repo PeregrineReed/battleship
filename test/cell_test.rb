@@ -27,6 +27,7 @@ class CellTest < Minitest::Test
     @cell.place_ship(@cruiser)
     assert_instance_of Ship, @cell.ship
     assert_same @cruiser, @cell.ship
+    refute_equal true, @cell.empty?
   end
 
 end
