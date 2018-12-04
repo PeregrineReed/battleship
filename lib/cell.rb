@@ -6,6 +6,10 @@ class Cell
     @coordinate = coordinate
   end
 
+  def ship
+    nil
+  end
+
   def empty?
     true
   end
