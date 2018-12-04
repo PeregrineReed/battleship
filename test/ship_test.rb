@@ -39,4 +39,14 @@ class ShipTest < Minitest::Test
     @cruiser.hit
     assert_equal 2, @cruiser.health
   end
+
+  def test_ship_sinks_at_zero_health
+    3.times {@cruiser.hit}
+    assert_equal true, @cruiser.sunk?
+  end
+
+  def test_ships_cannot_have_negative_health
+    4.times {@cruiser.hit}
+    assert_equal 0, @cruiser.health 
+  end
 end
