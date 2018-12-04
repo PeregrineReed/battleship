@@ -20,4 +20,8 @@ class Cell
     @ship = ship
   end
 
+  def fired_upon?
+    false
+  end
+
 end
