@@ -13,7 +13,7 @@ class ShipTest < Minitest::Test
   end
 
   def test_ship_has_name
-
+    assert_equal "Cruiser", @cruiser.name 
   end
 
 end
