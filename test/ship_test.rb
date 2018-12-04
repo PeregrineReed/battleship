@@ -27,7 +27,10 @@ class ShipTest < Minitest::Test
 
   def test_ship_length_is_equal_to_starting_health
     assert_equal 3, @cruiser.length
-    assert_equal 2, @submarine.length 
+    assert_equal 2, @submarine.length
   end
 
+  def test_ship_starts_not_sunk
+    refute_equal true, @cruiser.sunk?
+  end
 end

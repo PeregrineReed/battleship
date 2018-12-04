@@ -5,9 +5,13 @@ class Ship
               :health,
               :length
 
-  def initialize(name, health)
+  def initialize(name, health_arg)
     @name = name
-    @health = health
-    @length = health
+    @health = health_arg
+    @length = health_arg
+  end
+
+  def sunk?
+    false
   end
 end
