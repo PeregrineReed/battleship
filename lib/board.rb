@@ -22,6 +22,12 @@ class Board
     }
   end
 
+  def valid_coordinate?(coordinate)
+    self.cells.values.one? do |cell|
+      cell.coordinate == coordinate
+    end
+  end
+  
   def valid_placement?(ship, coordinates)
     if coordinates.count == ship.length && ship.class == Ship
       true
