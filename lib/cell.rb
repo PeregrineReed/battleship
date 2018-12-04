@@ -6,4 +6,8 @@ class Cell
     @coordinate = coordinate
   end
 
+  def empty?
+    true
+  end
+
 end
