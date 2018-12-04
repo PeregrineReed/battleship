@@ -2,8 +2,9 @@ require 'pry'
 
 class Ship
   attr_reader :name,
-              :health,
               :length
+
+  attr_accessor :health
 
   def initialize(name, health_arg)
     @name = name
