@@ -14,4 +14,10 @@ class CellTest < Minitest::Test
     assert_instance_of Cell, @cell
   end
 
+  def test_cell_has_coordinates
+    assert_equal "B4", @cell.coordinate
+  end
+
+  def test_
+
 end
