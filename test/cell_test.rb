@@ -42,7 +42,6 @@ class CellTest < Minitest::Test
   def test_ship_health_decreases_when_cell_is_fired_upon
     @cell.place_ship(@cruiser)
     @cell.fire_upon
-    # require 'pry';binding.pry
     assert_equal 2, @cell.ship.health
   end
 
@@ -66,6 +65,14 @@ class CellTest < Minitest::Test
     @cell.place_ship(@cruiser)
     @cell.fire_upon
     assert_equal "H", @cell.render
+  end
+
+  def test_a_ship_with_zero_health_in_a_cell_renders_x
+    @cell.place_ship(@cruiser)
+    @cell.fire_upon
+    assert_equal 'H', @cell.render
+    2.times { @cell.fire_upon }
+    assert_equal 'X', @cell.render
   end
 
 end

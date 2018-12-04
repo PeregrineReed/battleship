@@ -32,12 +32,14 @@ class Cell
   end
 
   def render(occupied = false)
-    if self.ship != nil && occupied
+    if self.ship != nil && @ship.sunk?
+      'X'
+    elsif @fired_upon && self.ship != nil
+      'H'
+    elsif self.ship != nil && occupied
       'S'
     elsif @fired_upon && empty?
       'M'
-    elsif @fired_upon && self.ship != nil
-      'H'
     else
       '.'
     end
