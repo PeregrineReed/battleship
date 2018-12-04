@@ -50,4 +50,10 @@ class CellTest < Minitest::Test
     assert_equal '.', @cell.render
   end
 
+  def test_that_firing_on_an_empty_cell_renders_m
+    assert_equal true, @cell.empty?
+    @cell.fire_upon
+    assert_equal 'M', @cell.render
+  end
+
 end
