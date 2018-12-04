@@ -17,9 +17,10 @@ class BoardTest < Minitest::Test
   end
 
   def test_board_starts_with_cells
-    @board.cells.each_value do |cell|
-      assert_instance_of Cell, cell
-    end
+      all_cells = @board.cells.values.all? do |cell|
+        cell.class == Cell
+      end
+    assert_equal true, all_cells
   end
 
 end
