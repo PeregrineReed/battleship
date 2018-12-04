@@ -31,8 +31,10 @@ class Cell
     @fired_upon
   end
 
-  def render
-    if @fired_upon
+  def render(occupied = false)
+    if self.ship != nil && occupied
+      'S'
+    elsif @fired_upon && empty?
       'M'
     else
       '.'
