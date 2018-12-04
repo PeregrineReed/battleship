@@ -46,4 +46,8 @@ class CellTest < Minitest::Test
     assert_equal 2, @cell.ship.health
   end
 
+  def test_that_render_defaults_to_a_dot
+    assert_equal '.', @cell.render
+  end
+
 end
