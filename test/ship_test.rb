@@ -25,4 +25,9 @@ class ShipTest < Minitest::Test
     assert_equal 3, @cruiser.health
   end
 
+  def test_ship_length_is_equal_to_starting_health
+    assert_equal 3, @cruiser.length
+    assert_equal 2, @submarine.length 
+  end
+
 end
