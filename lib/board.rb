@@ -28,27 +28,28 @@ class Board
     end
   end
 
-  def valid_horizontal(coordinates)
-    placement_validator = []
-    horizontal = coordinates[0][0]
+  def row_confirm(y_axis)
 
-    cells.keys.each_cons(coordinates.length) do |cell_key|
-      if cell_key.all? {|element| element[0].eql?(horizontal)}
-        placement_validator << cell_key
+    valid_placements = []
+    row_index = y_axis[0][0]
+    cell_keys = cells.keys
+
+    cell_keys.each_cons(y_axis.length) do |cell_key|
+      if cell_key.all? {|key| key[0].eql?(row_index)}
+        valid_placements << cell_key
       end
     end
 
-    placement_validator.any? do |placement|
-      placement == coordinates
+    valid_placements.any? do |placement|
+      placement == y_axis
     end
   end
 
   def valid_placement?(ship, coordinates)
     if coordinates.count == ship.length && ship.class == Ship
-      if valid_horizontal(coordinates)
+      if row_confirm(coordinates)
         true
       end
-
     else
       false
     end
