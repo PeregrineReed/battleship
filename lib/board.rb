@@ -18,7 +18,7 @@ class Board
       "D1" => Cell.new("D1"),
       "D2" => Cell.new("D2"),
       "D3" => Cell.new("D3"),
-      "D4" => Cell.new("D4"),
+      "D4" => Cell.new("D4")
     }
   end
 
@@ -27,10 +27,28 @@ class Board
       cell.coordinate == coordinate
     end
   end
-  
+
+  def valid_horizontal(coordinates)
+    placement_validator = []
+    horizontal = coordinates[0][0]
+
+    cells.keys.each_cons(coordinates.length) do |cell_key|
+      if cell_key.all? {|element| element[0].eql?(horizontal)}
+        placement_validator << cell_key
+      end
+    end
+
+    placement_validator.any? do |placement|
+      placement == coordinates
+    end
+  end
+
   def valid_placement?(ship, coordinates)
     if coordinates.count == ship.length && ship.class == Ship
-      true
+      if valid_horizontal(coordinates)
+        true
+      end
+
     else
       false
     end
