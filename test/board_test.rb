@@ -35,4 +35,11 @@ class BoardTest < Minitest::Test
     assert_equal false, @board.valid_placement?(@submarine, ["A1", "A2", "A3"])
   end
 
+  def test_board_validates_placement_only_when_consecutive
+    assert_equal false, @board.valid_placement?(@cruiser, ["A1", "A2", "A4"])
+    assert_equal false, @board.valid_placement?(@submarine, ["A1", "C1"])
+    assert_equal true, @board.valid_placement?(@cruiser, ["A1", "B1", "C1"])
+    assert_equal false, @board.valid_placement?(@cruiser, ["A3", "A2", "A1"])
+    assert_equal false, @board.valid_placement?(@submarine, ["C1", "B1"])
+  end
 end
