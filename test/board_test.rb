@@ -53,6 +53,19 @@ class BoardTest < Minitest::Test
     assert_equal false, @board.valid_placement?(@submarine, ["C2", "D3"])
   end
 
+    def test_a_ship_is_placed_in_consecutive_cells_equal_to_length
+      cell_1 = @board.cells["B1"]
+      cell_2 = @board.cells["C1"]
+      cell_3 = @board.cells["D1"]
+
+      @board.place(@cruiser, ["B1", "C1", "D1"])
+
+      assert_equal @cruiser, cell_1.ship
+      assert_equal @cruiser, cell_2.ship
+      assert_equal @cruiser, cell_3.ship
+      assert_equal cell_1.ship, cell_2.ship
+    end
+
 
 
 end
