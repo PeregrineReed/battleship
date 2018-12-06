@@ -6,10 +6,10 @@ class Ship
 
   attr_accessor :health
 
-  def initialize(name, health_arg)
+  def initialize(name, length)
     @name = name
-    @health = health_arg
-    @length = health_arg
+    @length = length
+    @health = length
   end
 
   def sunk?

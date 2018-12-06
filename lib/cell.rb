@@ -31,12 +31,12 @@ class Cell
     @fired_upon
   end
 
-  def render(occupied = false)
-    if self.ship != nil && @ship.sunk?
+  def render(reveal = false)
+    if !empty? && @ship.sunk?
       'X'
-    elsif @fired_upon && self.ship != nil
+    elsif @fired_upon && !empty?
       'H'
-    elsif self.ship != nil && occupied
+    elsif !empty? && reveal
       'S'
     elsif @fired_upon && empty?
       'M'
