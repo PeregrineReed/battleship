@@ -1,3 +1,3 @@
 Project: Battleship
 
-Project Collaborators: Peregrine Balas, Trevor Nodland
+Project Contributors: Peregrine Balas, Trevor Nodland
