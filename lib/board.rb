@@ -20,6 +20,7 @@ class Board
       "D3" => Cell.new("D3"),
       "D4" => Cell.new("D4")
     }
+    @full_cells = []
   end
 
   def valid_coordinate?(coordinate)
@@ -61,15 +62,28 @@ class Board
 
   end
 
-  def valid_placement?(ship, coordinates)
-    confirm_ship = coordinates.count == ship.length
+  def confirmed?(coordinates)
+    empty_spaces = cells.keys.reject do |coordinate|
+      @full_cells.include?(coordinate)
+    end
     valid_coordinates = coordinates.all? do |coordinate|
-      valid_coordinate?(coordinate)
+      valid_coordinate?(coordinate) && empty_spaces.include?(coordinate)
     end
     confirm_coordinates = (vertical?(coordinates) || horizontal?(coordinates)) && valid_coordinates
-
-    confirm_ship && confirm_coordinates
   end
+
+
+  def valid_placement?(ship, coordinates)
+    confirm_ship = coordinates.count == ship.length
+
+    confirm_ship && confirmed?(coordinates)
+  end
+
+  def fill_cells(coordinates)
+    @full_cells << coordinates
+    @full_cells.flatten!
+  end
+
 
   def place(ship, coordinates)
     board_cells = @cells.values
@@ -79,6 +93,7 @@ class Board
         cell.place_ship(ship) if valid_placement?(ship, coordinates)
       end
     end
+    fill_cells(coordinates)
   end
 
 end

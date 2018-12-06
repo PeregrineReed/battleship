@@ -12,30 +12,30 @@ class BoardTest < Minitest::Test
     @submarine = Ship.new("Submarine", 2)
   end
 
-  def test_board_exists
+  def test_it_exists
     assert_instance_of Board, @board
   end
 
-  def test_board_starts_with_cells
+  def test_it_starts_with_cells
       all_cells = @board.cells.values.all? do |cell|
         cell.class == Cell
       end
     assert_equal true, all_cells
   end
 
-  def test_board_can_can_validate_coordinates
+  def test_it_can_can_validate_coordinates
     assert_equal true, @board.valid_coordinate?("A1")
     assert_equal true, @board.valid_coordinate?("D4")
     assert_equal false, @board.valid_coordinate?("A5")
     assert_equal false, @board.valid_coordinate?("E1")
   end
 
-  def test_board_validates_placement_equal_to_a_ships_length
+  def test_it_validates_placement_equal_to_a_ships_length
     assert_equal true, @board.valid_placement?(@cruiser, ["A1", "A2", "A3"])
     assert_equal false, @board.valid_placement?(@submarine, ["A1", "A2", "A3"])
   end
 
-  def test_board_validates_placement_only_when_consecutive
+  def test_it_validates_placement_only_when_consecutive
     assert_equal false, @board.valid_placement?(@cruiser, ["A1", "A2", "A4"])
     assert_equal false, @board.valid_placement?(@submarine, ["A1", "C1"])
     assert_equal true, @board.valid_placement?(@cruiser, ["A1", "B1", "C1"])
@@ -66,7 +66,10 @@ class BoardTest < Minitest::Test
     assert_equal cell_1.ship, cell_2.ship
   end
 
-  def   
+  def test_ships_cant_overlap_coordinates
+    @board.place(@cruiser, ["B1", "C1", "D1"])
+    assert_equal false, @board.valid_placement?(@submarine, ["B1", "B2"])
+  end
 
 
 
