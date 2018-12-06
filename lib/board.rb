@@ -23,7 +23,7 @@ class Board
   end
 
   def valid_coordinate?(coordinate)
-    self.cells.values.one? do |cell|
+    @cells.values.one? do |cell|
       cell.coordinate == coordinate
     end
   end
@@ -63,7 +63,11 @@ class Board
 
   def valid_placement?(ship, coordinates)
     confirm_ship = coordinates.count == ship.length && ship.class == Ship
-    confirm_coordinates = column_confirm(coordinates) || row_confirm(coordinates)
+    valid_coordinates = coordinates.all? do |coordinate|
+      valid_coordinate?(coordinate)
+    end
+    confirm_coordinates = (column_confirm(coordinates) || row_confirm(coordinates)) && valid_coordinates
+
     if confirm_ship && confirm_coordinates
         true
     else
