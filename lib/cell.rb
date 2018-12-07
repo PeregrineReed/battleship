@@ -31,14 +31,15 @@ class Cell
     @fired_upon
   end
 
-  def render(occupied = false)
-    if self.ship != nil && @ship.sunk?
+  def render(reveal = false)
+    case
+    when !empty? && @ship.sunk?
       'X'
-    elsif @fired_upon && self.ship != nil
+    when @fired_upon && !empty?
       'H'
-    elsif self.ship != nil && occupied
+    when !empty? && reveal
       'S'
-    elsif @fired_upon && empty?
+    when @fired_upon && empty?
       'M'
     else
       '.'

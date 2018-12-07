@@ -26,8 +26,8 @@ class CellTest < Minitest::Test
   def test_ship_can_be_placed_in_cell
     @cell.place_ship(@cruiser)
     assert_instance_of Ship, @cell.ship
-    assert_same @cruiser, @cell.ship
-    refute_equal true, @cell.empty?
+    assert_equal @cruiser, @cell.ship
+    assert_equal false, @cell.empty?
   end
 
   def test_cell_default_is_not_fired_upon

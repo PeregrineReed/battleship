@@ -6,23 +6,17 @@ class Ship
 
   attr_accessor :health
 
-  def initialize(name, health_arg)
+  def initialize(name, length)
     @name = name
-    @health = health_arg
-    @length = health_arg
+    @length = length
+    @health = length
   end
 
   def sunk?
-    if @health == 0
-      true
-    else
-      false
-    end
+    @health.eql?(0)
   end
 
   def hit
-    if @health > 0
-      @health -= 1
-    end
+    @health -= 1 if @health > 0
   end
 end

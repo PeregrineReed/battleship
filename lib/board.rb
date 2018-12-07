@@ -20,6 +20,7 @@ class Board
       "D3" => Cell.new("D3"),
       "D4" => Cell.new("D4")
     }
+    @full_cells = []
   end
 
   def valid_coordinate?(coordinate)
@@ -28,30 +29,30 @@ class Board
     end
   end
 
-  def row_confirm(y_axis)
+  def horizontal?(coordinates)
 
     valid_placements = []
-    row_sample = y_axis[0][0]
+    row_sample = coordinates[0][0]
     cell_keys = cells.keys
 
-    cell_keys.each_cons(y_axis.length) do |cell_key|
+    cell_keys.each_cons(coordinates.length) do |cell_key|
       if cell_key.all? {|key| key[0].eql?(row_sample)}
         valid_placements << cell_key
       end
     end
 
     valid_placements.any? do |placement|
-      placement == y_axis
+      placement == coordinates
     end
   end
 
-  def column_confirm(x_axis)
+  def vertical?(coordinates)
 
     cell_keys = cells.keys
-    column_sample = x_axis[0][1]
+    column_sample = coordinates[0][1]
     coordinate_pairs = []
 
-    x_axis.each_cons(2) do |coordinate|
+    coordinates.each_cons(2) do |coordinate|
       coordinate_pairs << coordinate
     end
 
@@ -61,19 +62,28 @@ class Board
 
   end
 
-  def valid_placement?(ship, coordinates)
-    confirm_ship = coordinates.count == ship.length && ship.class == Ship
+  def confirmed?(coordinates)
+    empty_spaces = cells.keys.reject do |coordinate|
+      @full_cells.include?(coordinate)
+    end
     valid_coordinates = coordinates.all? do |coordinate|
-      valid_coordinate?(coordinate)
+      valid_coordinate?(coordinate) && empty_spaces.include?(coordinate)
     end
-    confirm_coordinates = (column_confirm(coordinates) || row_confirm(coordinates)) && valid_coordinates
-
-    if confirm_ship && confirm_coordinates
-        true
-    else
-      false
-    end
+    confirm_coordinates = (vertical?(coordinates) || horizontal?(coordinates)) && valid_coordinates
   end
+
+
+  def valid_placement?(ship, coordinates)
+    confirm_ship = coordinates.count == ship.length
+
+    confirm_ship && confirmed?(coordinates)
+  end
+
+  def fill_cells(coordinates)
+    @full_cells << coordinates
+    @full_cells.flatten!
+  end
+
 
   def place(ship, coordinates)
     board_cells = @cells.values
@@ -83,6 +93,28 @@ class Board
         cell.place_ship(ship) if valid_placement?(ship, coordinates)
       end
     end
+    fill_cells(coordinates)
+  end
+
+  def render(reveal = false)
+    abcs = ('A'..'Z').to_a
+
+    all_rows = @cells.values.group_by do |cell|
+      cell.coordinate[0]
+    end
+
+    all_renders = {}
+    all_rows.each do |key, value|
+      all_renders[key] = value.map do |cell|
+        if reveal
+          cell.render(true)
+        else
+          cell.render
+        end
+      end
+    end
+
+    "  1 2 3 4 \nA #{all_renders[abcs[0]].join(' ')} \nB #{all_renders[abcs[1]].join(' ')} \nC #{all_renders[abcs[2]].join(' ')} \nD #{all_renders[abcs[3]].join(' ')} \n"
   end
 
 end
