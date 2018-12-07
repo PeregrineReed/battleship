@@ -96,4 +96,25 @@ class Board
     fill_cells(coordinates)
   end
 
+  def render(reveal = false)
+    abcs = ('A'..'Z').to_a
+
+    all_rows = @cells.values.group_by do |cell|
+      cell.coordinate[0]
+    end
+    all_renders = {}
+    row = []
+    all_rows.each do |key, value|
+      all_renders[key] = value.map do |cell|
+        if reveal
+          cell.render(true)
+        else
+          cell.render
+        end
+      end
+    end
+    # require 'pry';binding.pry
+    "  1 2 3 4 \nA #{all_renders[abcs[0]].join(' ')} \nB #{all_renders[abcs[1]].join(' ')} \nC #{all_renders[abcs[2]].join(' ')} \nD #{all_renders[abcs[3]].join(' ')} \n"
+  end
+
 end

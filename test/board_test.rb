@@ -71,6 +71,10 @@ class BoardTest < Minitest::Test
     assert_equal false, @board.valid_placement?(@submarine, ["B1", "B2"])
   end
 
-
+  def test_it_can_render_cells
+    assert_equal "  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n", @board.render
+    @board.place(@cruiser, ["A1", "A2", "A3"])
+    assert_equal "  1 2 3 4 \nA S S S . \nB . . . . \nC . . . . \nD . . . . \n", @board.render(true)
+  end
 
 end
