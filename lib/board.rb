@@ -31,18 +31,16 @@ class Board
 
   def horizontal?(coordinates)
 
-    valid_placements = []
-    row_sample = coordinates[0][0]
     cell_keys = cells.keys
+    row_sample = coordinates[0][0]
+    coordinate_pairs = []
 
-    cell_keys.each_cons(coordinates.length) do |cell_key|
-      if cell_key.all? {|key| key[0].eql?(row_sample)}
-        valid_placements << cell_key
-      end
+    coordinates.each_cons(2) do |coordinate|
+      coordinate_pairs << coordinate
     end
 
-    valid_placements.any? do |placement|
-      placement == coordinates
+    coordinate_pairs.all? do |pair|
+      pair[1][1].ord - pair[0][1].ord == 1 && pair[0][0] == pair[1][0]
     end
   end
 
