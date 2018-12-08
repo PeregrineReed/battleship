@@ -1,3 +1,4 @@
+require 'pry'
 class Game
 
   attr_reader :computer_board,
