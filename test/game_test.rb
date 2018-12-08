@@ -20,4 +20,9 @@ class GameTest < Minitest::Test
     assert_instance_of Board, @game.player_board
   end
 
+  def test_each_player_has_ships
+    assert_equal [], @game.computer_ships
+    assert_equal [], @game.computer_ships
+  end
+
 end
