@@ -25,4 +25,8 @@ class GameTest < Minitest::Test
     assert_equal [], @game.computer_ships
   end
 
+  def test_it_has_a_main_menu
+    assert_equal @game.setup, @game.main_menu
+  end
+
 end
