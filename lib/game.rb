@@ -7,10 +7,14 @@ class Game
               :player_ships
 
   def initialize
+    @cp_cruiser = Ship.new("crusier", 3)
+    @cp_submarine = Ship.new("submarine", 2)
+    @pl_cruiser = Ship.new("crusier", 3)
+    @pl_submarine = Ship.new("submarine", 2)
     @computer_board = Board.new
-    @computer_ships = []
+    @computer_ships = [@cp_cruiser, @cp_submarine]
     @player_board = Board.new
-    @player_ships = []
+    @player_ships = [@pl_cruiser, @pl_submarine]
   end
 
   def main_menu
@@ -34,6 +38,12 @@ class Game
   end
 
   def setup
+    shuffled = @computer_board.cells.keys.shuffle
+    first_coordinate = shuffled.pop
+    axes = [build_horizontally(first_coordinate, shuffled), build_vertically(first_coordinate, shuffled)]
+    axis = axes.sample
+
+    @computer_board.place("cruiser", axis[0])
   end
 
 end
