@@ -25,7 +25,7 @@ class Board
 
   def valid_coordinate?(coordinate)
     @cells.values.one? do |cell|
-      cell.coordinate == coordinate
+      cell.coordinate == coordinate && !cell.fired_upon?
     end
   end
 
