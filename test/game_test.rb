@@ -9,8 +9,6 @@ class GameTest < Minitest::Test
 
   def setup
     @game = Game.new
-    @shuffled = @game.computer_board.cells.keys.shuffle
-    @random_coord = @shuffled.pop
   end
 
   def test_it_exists
@@ -18,21 +16,25 @@ class GameTest < Minitest::Test
   end
 
   def test_it_has_two_boards
-    assert_instance_of Board, @game.computer_board
+    assert_instance_of Board, @game.cpu_board
     assert_instance_of Board, @game.player_board
   end
 
   def test_each_player_can_have_ships
-    skip
-    assert_equal [], @game.computer_ships
-    assert_equal [], @game.computer_ships
+    assert_equal [@cpu_cruiser, @cpu_sub], @game.cpu_ships
+    assert_equal [@player_cruiser, @player_sub], @game.player_ships
   end
 
   def test_computer_can_place_ships
     @game.cpu_setup
-    assert_equal 5, @game.computer_board.cells.values.count {|cell|
+    assert_equal 5, @game.cpu_board.cells.values.count do |cell|
       !cell.empty?
-    }
+    end
+  end
+
+  def test_it_has_a_main_menu
+    skip
+    assert_equal @game.setup, @game.main_menu
   end
 
 
