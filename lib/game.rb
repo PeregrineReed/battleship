@@ -39,55 +39,53 @@ class Game
   end
 
   def setup
-    ship_placement = []
-    axes = ["horizontal", "vertical"]
-
+    occupied_spaces = []
     @computer_ships.each do |ship|
-      first_coordinate = @computer_board.cells.keys.sample
+      open_spaces = @computer_board.cells.keys - occupied_spaces
+      random_coordinate = open_spaces.sample
+      axes = [horizontal(random_coordinate), vertical(random_coordinate)]
       axis = axes.sample
 
-      if axis == "horizontal"
-        valid_horizontal_placements = []
-        @computer_board.cells.keys.each do |coordinate|
-          if coordinate.chars[0] == first_coordinate.chars[0]
-            # unless coordinate == first_coordinate
-              valid_horizontal_placements << coordinate
-            # end
-          end
-        end
-
-      else
-        valid_vertical_placements = []
-        @computer_board.cells.keys.each do |coordinate|
-          if coordinate.chars[1] == first_coordinate.chars[1]
-            # unless coordinate == first_coordinate
-              valid_vertical_placements << coordinate
-            # end
-          end
-        end
-      end
-
       ship_placement = []
-      # ship_placement << first_coordinate
       until @computer_board.valid_placement?(ship, ship_placement)
-        if ship_placement.length == ship.length
-          ship_placement = [first_coordinate]
-        end
-        if axis == "horizontal"
-          valid_horizontal_placements.rotate!(1).each do |coordinate|
+
+        if axis == horizontal(random_coordinate)
+          horizontal(random_coordinate).each do |coordinate|
             ship_placement << coordinate unless ship_placement.length == ship.length
-            # axis = "vertical"
           end
+
         else
-          valid_vertical_placements.rotate!(1).each do |coordinate|
+          vertical(random_coordinate).each do |coordinate|
             ship_placement << coordinate unless ship_placement.length == ship.length
-            # axis = "horizontal"
           end
         end
         ship_placement.sort!
       end
       @computer_board.place(ship, ship_placement)
-      binding.pry
+        ship_placement.each do |coordinate|
+          occupied_spaces << coordinate
+        end
+        binding.pry
     end
+  end
+
+  def horizontal(random_coordinate)
+    valid_horizontal_placements = []
+    @computer_board.cells.keys.each do |coordinate|
+      if coordinate[0] == random_coordinate[0]
+         valid_horizontal_placements << coordinate
+      end
+    end
+    valid_horizontal_placements
+  end
+
+  def vertical(random_coordinate)
+    valid_vertical_placements = []
+    @computer_board.cells.keys.each do |coordinate|
+      if coordinate[1] == random_coordinate[1]
+          valid_vertical_placements << coordinate
+      end
+    end
+    valid_vertical_placements
   end
 end
