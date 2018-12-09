@@ -1,4 +1,5 @@
 require 'pry'
+
 class Game
 
   attr_reader :cpu_board,
@@ -8,12 +9,13 @@ class Game
 
   def initialize
     @cpu_board = Board.new
-    @cpu_ships = []
+    @cpu_ships = [@cpu_cruiser, @cpu_sub]
     @cpu_cruiser = Ship.new("Cruiser", 3)
     @cpu_sub = Ship.new("Submarine", 2)
     @cpu_shots = []
+    
     @player_board = Board.new
-    @player_ships = []
+    @player_ships = [@player_cruiser, @player_sub]
     @player_cruiser = Ship.new("Cruiser", 3)
     @player_sub = Ship.new("Submarine", 2)
     @player_shots = []
@@ -28,15 +30,64 @@ class Game
       else
         puts "\n\n\nWelcome to BATTLESHIP\n\nEnter p to play or q to quit\n"
         input = gets.chomp.downcase
-        if input == 'p' || 'play'
-          return setup
-        elsif input == 'q' || 'quit'
-          break
-        else
-          failed_starts << input
-        end
+      end
+      if input == 'p' || input == 'play'
+        setup
+      elsif input == 'q' || input == 'quit'
+        break
+      else
+        failed_starts << input
       end
     end
+  end
+
+  def cpu_setup
+    occupied_spaces = []
+    @computer_ships.each do |ship|
+      open_spaces = @computer_board.cells.keys - occupied_spaces
+      random_coordinate = open_spaces.sample
+      axes = [horizontal(random_coordinate), vertical(random_coordinate)]
+      ship_placement = []
+
+      until @computer_board.valid_placement?(ship, ship_placement)
+        if ship_placement.length >= ship.length
+          ship_placement.clear
+          random_coordinate = open_spaces.sample
+          axes = [horizontal(random_coordinate), vertical(random_coordinate)]
+        end
+        axis = axes.sample
+        axis.each do |coordinate|
+          unless occupied_spaces.include?(coordinate) || ship_placement.length >= ship.length
+            ship_placement << coordinate
+          end
+        end
+        ship_placement.sort!
+      end
+      @computer_board.place(ship, ship_placement)
+        ship_placement.each do |coordinate|
+          occupied_spaces << coordinate
+        end
+    end
+  end
+
+  def horizontal(random_coordinate)
+    valid_horizontal_placements = []
+    @computer_board.cells.keys.each do |coordinate|
+      if coordinate[0] == random_coordinate[0]
+         valid_horizontal_placements << coordinate
+      end
+    end
+    valid_horizontal_placements.shuffle
+  end
+
+  def vertical(random_coordinate)
+    valid_vertical_placements = []
+    @computer_board.cells.keys.each do |coordinate|
+      if coordinate[1] == random_coordinate[1]
+          valid_vertical_placements << coordinate
+      end
+    end
+    valid_vertical_placements.shuffle
   end
 
   def setup
@@ -134,6 +185,5 @@ class Game
       "hit!\n#{current_player} sunk #{opposing_player} battleship!"
     end
   end
-
 
 end
