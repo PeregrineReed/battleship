@@ -9,9 +9,13 @@ class Game
   def initialize
     @cpu_board = Board.new
     @cpu_ships = []
+    @cpu_cruiser = Ship.new("Cruiser", 3)
+    @cpu_sub = Ship.new("Submarine", 2)
     @cpu_shots = []
     @player_board = Board.new
     @player_ships = []
+    @player_cruiser = Ship.new("Cruiser", 3)
+    @player_sub = Ship.new("Submarine", 2)
     @player_shots = []
   end
 
@@ -41,29 +45,30 @@ class Game
     #   @cpu_board.place(ship, coordinates)
     # end
 
+    num_spelling = { 1 => "one", 2 => "two", 3 => "three", 4 => "four", 5 => "five", 6 => "six" }
 
     puts """I have laid out my ships on the grid.
     You now need to lay out your two ships."""
-    # @player_ships.each do |ship|
-    # ship_length = num_spelling[ship.length]
-    # if ship == @player_ships.last
-    # print "and the #{ship} is {ship_length} units long.\n"
-    # elsif ship == @player_ships.first
-    # print "The #{ship} is #{ship_length} units long "
-    # else
-    # print ", the #{ship} is #{ship_length} units long"
+    @player_ships.each do |ship|
+    ship_length = num_spelling[ship.length]
+    if ship == @player_ships.last
+    print "and the #{ship} is {ship_length} units long.\n"
+    elsif ship == @player_ships.first
+    print "The #{ship} is #{ship_length} units long "
+    else
+    print ", the #{ship} is #{ship_length} units long"
     puts "The Cruiser is two units long and the Submarine is three units long."
     puts player_board
-    # @player_ships.each do |ship|
-    #   print "Enter the squares for #{ship} (#{ship.length} spaces)\n>  "
-      # input = gets.chomp.upcase.squeeze(" ")
-      # input = input.split(" ").sort
-      # if !@board.valid_placement?(ship, input)
-      #   print "Those are invalid coordinates. Please try again:\n>  "
-      # elsif @board.valid_placement?(ship, input)
-      #   @player_board.place(ship, input)
-      # end
-    # end
+    @player_ships.each do |ship|
+      print "Enter the squares for #{ship} (#{ship.length} spaces)\n>  "
+      input = gets.chomp.upcase.squeeze(" ")
+      input = input.split(" ").sort
+      if !@board.valid_placement?(ship, input)
+        print "Those are invalid coordinates. Please try again:\n>  "
+      elsif @board.valid_placement?(ship, input)
+        @player_board.place(ship, input)
+      end
+    end
     turn
   end
 
