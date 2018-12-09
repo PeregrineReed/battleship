@@ -49,15 +49,8 @@ class Game
       ship_placement = []
       until @computer_board.valid_placement?(ship, ship_placement)
 
-        if axis == horizontal(random_coordinate)
-          horizontal(random_coordinate).each do |coordinate|
-            ship_placement << coordinate unless ship_placement.length == ship.length
-          end
-
-        else
-          vertical(random_coordinate).each do |coordinate|
-            ship_placement << coordinate unless ship_placement.length == ship.length
-          end
+        axis.each do |coordinate|
+          ship_placement << coordinate unless ship_placement.length == ship.length
         end
         ship_placement.sort!
       end
@@ -65,7 +58,7 @@ class Game
         ship_placement.each do |coordinate|
           occupied_spaces << coordinate
         end
-        binding.pry
+        # binding.pry
     end
   end
 
