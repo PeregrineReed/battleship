@@ -9,15 +9,15 @@ class Game
 
   def initialize
     @cpu_board = Board.new
-    @cpu_ships = [@cpu_cruiser, @cpu_sub]
     @cpu_cruiser = Ship.new("Cruiser", 3)
     @cpu_sub = Ship.new("Submarine", 2)
+    @cpu_ships = [@cpu_cruiser, @cpu_sub]
     @cpu_shots = []
-    
+
     @player_board = Board.new
-    @player_ships = [@player_cruiser, @player_sub]
     @player_cruiser = Ship.new("Cruiser", 3)
     @player_sub = Ship.new("Submarine", 2)
+    @player_ships = [@player_cruiser, @player_sub]
     @player_shots = []
   end
 
@@ -43,13 +43,13 @@ class Game
 
   def cpu_setup
     occupied_spaces = []
-    @computer_ships.each do |ship|
-      open_spaces = @computer_board.cells.keys - occupied_spaces
+    @cpu_ships.each do |ship|
+      open_spaces = @cpu_board.cells.keys - occupied_spaces
       random_coordinate = open_spaces.sample
       axes = [horizontal(random_coordinate), vertical(random_coordinate)]
       ship_placement = []
 
-      until @computer_board.valid_placement?(ship, ship_placement)
+      until @cpu_board.valid_placement?(ship, ship_placement)
         if ship_placement.length >= ship.length
           ship_placement.clear
           random_coordinate = open_spaces.sample
@@ -63,7 +63,7 @@ class Game
         end
         ship_placement.sort!
       end
-      @computer_board.place(ship, ship_placement)
+      @cpu_board.place(ship, ship_placement)
         ship_placement.each do |coordinate|
           occupied_spaces << coordinate
         end
@@ -72,7 +72,7 @@ class Game
 
   def horizontal(random_coordinate)
     valid_horizontal_placements = []
-    @computer_board.cells.keys.each do |coordinate|
+    @cpu_board.cells.keys.each do |coordinate|
       if coordinate[0] == random_coordinate[0]
          valid_horizontal_placements << coordinate
       end
@@ -82,7 +82,7 @@ class Game
 
   def vertical(random_coordinate)
     valid_vertical_placements = []
-    @computer_board.cells.keys.each do |coordinate|
+    @cpu_board.cells.keys.each do |coordinate|
       if coordinate[1] == random_coordinate[1]
           valid_vertical_placements << coordinate
       end
@@ -95,28 +95,31 @@ class Game
     # @cpu_ships.each do |ship|
     #   @cpu_board.place(ship, coordinates)
     # end
+    cpu_setup
 
     num_spelling = { 1 => "one", 2 => "two", 3 => "three", 4 => "four", 5 => "five", 6 => "six" }
 
     puts """I have laid out my ships on the grid.
     You now need to lay out your two ships."""
     @player_ships.each do |ship|
-    ship_length = num_spelling[ship.length]
-    if ship == @player_ships.last
-    print "and the #{ship} is {ship_length} units long.\n"
-    elsif ship == @player_ships.first
-    print "The #{ship} is #{ship_length} units long "
-    else
-    print ", the #{ship} is #{ship_length} units long"
-    puts "The Cruiser is two units long and the Submarine is three units long."
+      ship_length = num_spelling[ship.length]
+      if ship == @player_ships.last
+        print "and the #{ship.name} is #{ship_length} units long.\n"
+      elsif ship == @player_ships.first
+        print "The #{ship.name} is #{ship_length} units long "
+      else
+        print ", the #{ship.name} is #{ship_length} units long"
+        puts "The Cruiser is two units long and the Submarine is three units long."
+      end
+    end
     puts player_board
     @player_ships.each do |ship|
-      print "Enter the squares for #{ship} (#{ship.length} spaces)\n>  "
+      print "Enter the squares for #{ship.name} (#{ship.length} spaces)\n>  "
       input = gets.chomp.upcase.squeeze(" ")
       input = input.split(" ").sort
-      if !@board.valid_placement?(ship, input)
+      if !@player_board.valid_placement?(ship, input)
         print "Those are invalid coordinates. Please try again:\n>  "
-      elsif @board.valid_placement?(ship, input)
+      elsif @player_board.valid_placement?(ship, input)
         @player_board.place(ship, input)
       end
     end
@@ -124,17 +127,27 @@ class Game
   end
 
   def turn
-    cpu_board = @cpu_board.render
-    cpu_health = @computer_ships.map do |ship|
-      ship.health
-    end
-    player_board = @player_board.render(true)
-    player_health = @player_ships.map do |ship|
-      ship.health
-    end
-
     puts "We're all set to play!\n\n\n"
     loop do
+
+      cpu_board = @cpu_board.render
+      cpu_health = @cpu_ships.map do |ship|
+        ship.health
+      end
+
+      player_board = @player_board.render(true)
+      player_health = @player_ships.map do |ship|
+        ship.health
+      end
+
+      if player_health.sum == 0
+        puts "I won!"
+        break
+      elsif cpu_health.sum == 0
+        puts "You won!"
+        break
+      end
+
       puts "===============COMPUTER BOARD==============="
       puts cpu_board
       puts "================PLAYER BOARD================"
@@ -160,11 +173,6 @@ class Game
           # Add prompt for already having fired on a cell
           print "Please enter a valid coordinate:\n>  "
         end
-      end
-      if player_health.sum == 0
-        puts "I won!"
-      elsif cpu_health.sum == 0
-        puts "You won!"
       end
     end
   end
