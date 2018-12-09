@@ -38,19 +38,25 @@ class Game
     end
   end
 
-  def setup
+  def cpu_setup
     occupied_spaces = []
     @computer_ships.each do |ship|
       open_spaces = @computer_board.cells.keys - occupied_spaces
       random_coordinate = open_spaces.sample
       axes = [horizontal(random_coordinate), vertical(random_coordinate)]
-      axis = axes.sample
-
       ship_placement = []
-      until @computer_board.valid_placement?(ship, ship_placement)
 
+      until @computer_board.valid_placement?(ship, ship_placement)
+        if ship_placement.length >= ship.length
+          ship_placement.clear
+          random_coordinate = open_spaces.sample
+          axes = [horizontal(random_coordinate), vertical(random_coordinate)]
+        end
+        axis = axes.sample
         axis.each do |coordinate|
-          ship_placement << coordinate unless ship_placement.length == ship.length
+          unless occupied_spaces.include?(coordinate) || ship_placement.length >= ship.length
+            ship_placement << coordinate
+          end
         end
         ship_placement.sort!
       end
@@ -58,7 +64,6 @@ class Game
         ship_placement.each do |coordinate|
           occupied_spaces << coordinate
         end
-        # binding.pry
     end
   end
 
@@ -69,7 +74,7 @@ class Game
          valid_horizontal_placements << coordinate
       end
     end
-    valid_horizontal_placements
+    valid_horizontal_placements.shuffle
   end
 
   def vertical(random_coordinate)
@@ -79,6 +84,6 @@ class Game
           valid_vertical_placements << coordinate
       end
     end
-    valid_vertical_placements
+    valid_vertical_placements.shuffle
   end
 end
