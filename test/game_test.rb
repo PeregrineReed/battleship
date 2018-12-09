@@ -30,9 +30,9 @@ class GameTest < Minitest::Test
 
   def test_computer_can_place_ships
     @game.setup
-    # assert_equal 5, @game.computer_board.cells.values.count do |cell|
-    #   cell.empty? == false
-    end
+    assert_equal 5, @game.computer_board.cells.values.count {|cell|
+      !cell.empty?
+    }
   end
   # def test_it_has_a_main_menu
   #   assert_equal @game.setup, @game.main_menu
@@ -41,4 +41,4 @@ class GameTest < Minitest::Test
   # def test_computer_can_place_ships
   #   @game.build_horizontally(@random_coord, @shuffled)
   #
-  # end
+end
