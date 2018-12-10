@@ -115,12 +115,15 @@ class Game
     puts player_board
     @player_ships.each do |ship|
       print "Enter the squares for #{ship.name} (#{ship.length} spaces)\n>  "
-      input = gets.chomp.upcase.squeeze(" ")
-      input = input.split(" ").sort
-      if !@player_board.valid_placement?(ship, input)
-        print "Those are invalid coordinates. Please try again:\n>  "
-      elsif @player_board.valid_placement?(ship, input)
-        @player_board.place(ship, input)
+      loop do
+        input = gets.chomp.upcase.squeeze(" ")
+        input = input.split(" ").sort
+        if !@player_board.valid_placement?(ship, input)
+          print "Those are invalid coordinates. Please try again:\n>  "
+        elsif @player_board.valid_placement?(ship, input)
+          @player_board.place(ship, input)
+          break
+        end
       end
     end
     turn
