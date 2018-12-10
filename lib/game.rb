@@ -112,6 +112,7 @@ class Game
         puts "The Cruiser is two units long and the Submarine is three units long."
       end
     end
+    # Add verification for coordinate input out of order
     puts player_board
     @player_ships.each do |ship|
       print "Enter the squares for #{ship.name} (#{ship.length} spaces)\n>  "
@@ -130,24 +131,15 @@ class Game
   end
 
   def turn
+    # Tracking turn count?
     puts "We're all set to play!\n\n\n"
     loop do
 
       cpu_board = @cpu_board.render
-      cpu_health = @cpu_ships.map do |ship|
-        ship.health
-      end
-
       player_board = @player_board.render(true)
-      player_health = @player_ships.map do |ship|
-        ship.health
-      end
 
-      if player_health.sum == 0
-        puts "I won!"
-        break
-      elsif cpu_health.sum == 0
-        puts "You won!"
+      if end_game?
+        end_game
         break
       end
 
@@ -164,20 +156,63 @@ class Game
 
           unfired_at = player.keys - @cpu_shots
           cpu_input = unfired_at.sample
-          cpu_shot = player[cpu_input].fire_upon
 
           @player_shots << input
-          @cpu_shots << cpu_input
           cpu[input].fire_upon
           puts "Your shot on #{input} was a #{hit?(cpu, input)}"
+          if end_game?
+            break
+          end
+          cpu_shot = player[cpu_input].fire_upon
+          @cpu_shots << cpu_input
           puts "My shot on #{cpu_input} was a #{hit?(player, cpu_input)}"
           break
-        elsif
-          # Add prompt for already having fired on a cell
+        elsif @player_shots.include?(input)
+          puts "You already fired at #{input}!"
+          print "Please enter a valid coordinate:\n>  "
+        else
           print "Please enter a valid coordinate:\n>  "
         end
       end
     end
+  end
+
+  def cpu_health
+    ships = @cpu_ships.map do |ship|
+      ship.health
+    end
+    ships.sum
+  end
+
+  def player_health
+    ships = @player_ships.map do |ship|
+      ship.health
+    end
+    ships.sum
+  end
+
+  def end_game?
+    if cpu_health == 0 || player_health == 0
+      true
+    else
+      false
+    end
+  end
+
+  def end_game
+    puts "You won!" if cpu_health == 0
+    puts "I won!" if player_health == 0
+    @cpu_board = Board.new
+    @cpu_cruiser = Ship.new("Cruiser", 3)
+    @cpu_sub = Ship.new("Submarine", 2)
+    @cpu_ships = [@cpu_cruiser, @cpu_sub]
+    @cpu_shots = []
+
+    @player_board = Board.new
+    @player_cruiser = Ship.new("Cruiser", 3)
+    @player_sub = Ship.new("Submarine", 2)
+    @player_ships = [@player_cruiser, @player_sub]
+    @player_shots = []
   end
 
   def hit?(board, cell)
