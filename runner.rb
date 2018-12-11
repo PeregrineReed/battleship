@@ -1,3 +1,4 @@
+require './lib/computer'
 require './lib/game'
 require './lib/board'
 require './lib/cell'
