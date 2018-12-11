@@ -6,24 +6,7 @@ class Board
   def initialize(width: 4, height: 4)
     @width = width
     @height = height
-    @cells = cell_generator#{
-    #   "A1" => Cell.new("A1"),
-    #   "A2" => Cell.new("A2"),
-    #   "A3" => Cell.new("A3"),
-    #   "A4" => Cell.new("A4"),
-    #   "B1" => Cell.new("B1"),
-    #   "B2" => Cell.new("B2"),
-    #   "B3" => Cell.new("B3"),
-    #   "B4" => Cell.new("B4"),
-    #   "C1" => Cell.new("C1"),
-    #   "C2" => Cell.new("C2"),
-    #   "C3" => Cell.new("C3"),
-    #   "C4" => Cell.new("C4"),
-    #   "D1" => Cell.new("D1"),
-    #   "D2" => Cell.new("D2"),
-    #   "D3" => Cell.new("D3"),
-    #   "D4" => Cell.new("D4")
-    # }
+    @cells = cell_generator
     @full_cells = []
   end
 
@@ -64,7 +47,6 @@ class Board
   end
 
   def horizontal?(coordinates)
-
     cell_keys = cells.keys
     row_sample = coordinates[0][0]
     coordinate_pairs = []
@@ -79,7 +61,6 @@ class Board
   end
 
   def vertical?(coordinates)
-
     cell_keys = cells.keys
     column_sample = coordinates[0][1..-1]
     coordinate_pairs = []
@@ -135,9 +116,9 @@ class Board
       cell.coordinate[0]
     end
 
-    all_renders = {}
+    row_renders = {}
     all_rows.each do |row, coordinates|
-      all_renders[row] = coordinates.map do |cell|
+      row_renders[row] = coordinates.map do |cell|
         if reveal
           cell.render(true)
         else
@@ -150,11 +131,18 @@ class Board
       cell.coordinate[1..-1]
     end
 
-    header = "  #{num_header[0..8].join("  ")} #{num_header[9..-1].join(" ")} \n"
+    if num_header.length > 10
+      header = "  #{num_header[0..8].join("  ")} #{num_header[9..-1].join(" ")} \n"
+    elsif num_header.length == 10
+      header = "  #{num_header[0..8].join("  ")} #{num_header[9]} \n"
+    else
+      header = "  #{num_header[0..8].join("  ")} \n"
+    end
+
     counter = -1
     board = all_rows.keys.map do |row|
       counter += 1
-      "#{row} #{all_renders[abcs[counter]].join('  ')} \n"
+      "#{row} #{row_renders[abcs[counter]].join('  ')} \n"
     end
      header + board.join
   end
