@@ -32,7 +32,7 @@ class Game
 
   def setup
     generate_boards
-    @cpu.alt_setup
+    @cpu.setup
     ship_info
     puts @player.board.render(true)
     @player.place_ships
