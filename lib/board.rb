@@ -1,4 +1,7 @@
 class Board
+
+  include PlacementValidation
+
   attr_reader :cells,
               :width,
               :height
@@ -11,9 +14,9 @@ class Board
   end
 
   def cell_generator
-    # hash of number keys and corresponding letter values
     abcs =('A'..'Z').to_a
     nums = (1..26).to_a
+
     num_letter = {}
     nums.zip(abcs).each do |pair|
       num_letter[pair[0]] = pair[1]
@@ -21,82 +24,27 @@ class Board
 
     width = num_letter[@width]
     height = @height.to_i
-
-
     x_axis = ('A'..width).to_a
     y_axis = (1..height).to_a
 
-    hash = {}
+    board_cells = {}
     counter = 0
     x_axis.each do |letter|
 
       y_axis * y_axis.length.times do
         coordinate = letter + y_axis[counter].to_s
-        hash[coordinate] = Cell.new(coordinate)
+        board_cells[coordinate] = Cell.new(coordinate)
         counter += 1
         counter = 0 if counter == y_axis.length
       end
     end
-    hash
-  end
-
-  def valid_coordinate?(coordinate)
-    @cells.values.one? do |cell|
-      cell.coordinate == coordinate && !cell.fired_upon?
-    end
-  end
-
-  def horizontal?(coordinates)
-    cell_keys = cells.keys
-    row_sample = coordinates[0][0]
-    coordinate_pairs = []
-
-    coordinates.each_cons(2) do |coordinate|
-      coordinate_pairs << coordinate
-    end
-
-    coordinate_pairs.all? do |pair|
-      pair[1][1..-1].to_i - pair[0][1..-1].to_i == 1 && pair[0][0] == pair[1][0]
-    end
-  end
-
-  def vertical?(coordinates)
-    cell_keys = cells.keys
-    column_sample = coordinates[0][1..-1]
-    coordinate_pairs = []
-
-    coordinates.each_cons(2) do |coordinate|
-      coordinate_pairs << coordinate
-    end
-
-    coordinate_pairs.all? do |pair|
-      pair[1][0].ord - pair[0][0].ord == 1 && pair[0][1..-1] == pair[1][1..-1]
-    end
-
-  end
-
-  def confirmed?(coordinates)
-    empty_spaces = cells.keys.reject do |coordinate|
-      @full_cells.include?(coordinate)
-    end
-    valid_coordinates = coordinates.all? do |coordinate|
-      valid_coordinate?(coordinate) && empty_spaces.include?(coordinate)
-    end
-    confirm_coordinates = (vertical?(coordinates) || horizontal?(coordinates)) && valid_coordinates
-  end
-
-
-  def valid_placement?(ship, coordinates)
-    confirm_ship = coordinates.count == ship.length
-
-    confirm_ship && confirmed?(coordinates)
+    board_cells
   end
 
   def fill_cells(coordinates)
     @full_cells << coordinates
     @full_cells.flatten!
   end
-
 
   def place(ship, coordinates)
     board_cells = @cells.values

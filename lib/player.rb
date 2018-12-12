@@ -37,6 +37,7 @@ class Player
         end
       end
     end
+    puts "\nWe're all set, let's play BATTLESHIP!\n\n\n"
   end
 
 end
