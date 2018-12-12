@@ -12,8 +12,8 @@ class Player
     @shots = []
   end
 
-  def customize_board(width, height)
-    @board = Board.new(width: width, height: height)
+  def customize_board(height, width)
+    @board = Board.new(height: height, width: width)
   end
 
   def health

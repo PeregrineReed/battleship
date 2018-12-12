@@ -3,12 +3,12 @@ class Board
   include PlacementValidation
 
   attr_reader :cells,
-              :width,
-              :height
+              :height,
+              :width
 
-  def initialize(width: 4, height: 4)
-    @width = width
+  def initialize(height: 4, width: 4)
     @height = height
+    @width = width
     @cells = cell_generator
     @full_cells = []
   end
@@ -22,10 +22,10 @@ class Board
       num_letter[pair[0]] = pair[1]
     end
 
-    width = num_letter[@width]
-    height = @height.to_i
-    x_axis = ('A'..width).to_a
-    y_axis = (1..height).to_a
+    height = num_letter[@width]
+    width = @height.to_i
+    x_axis = ('A'..height).to_a
+    y_axis = (1..width).to_a
 
     board_cells = {}
     counter = 0
@@ -40,6 +40,8 @@ class Board
     end
     board_cells
   end
+
+  def cells_x_axis
 
   def fill_cells(coordinates)
     @full_cells << coordinates
