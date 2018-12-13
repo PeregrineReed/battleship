@@ -1,5 +1,6 @@
 require './lib/ship'
 require './lib/cell'
+require './lib/cell_generator'
 require './lib/placement_validation'
 require './lib/board'
 require './lib/computer'

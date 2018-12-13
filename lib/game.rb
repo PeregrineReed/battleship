@@ -2,10 +2,8 @@ class Game
 
   include GameDisplay
 
-  attr_reader :cpu_board,
-              :cpu_ships,
-              :player_board,
-              :player_ships
+  attr_reader :cpu,
+              :player
 
   def initialize
     @player = Player.new
@@ -23,7 +21,6 @@ class Game
 
 
   def turn
-    # Tracking turn count?
     loop do
       if end_game?
         end_game
@@ -55,10 +52,10 @@ class Game
       if @cpu.board.valid_coordinate?(input)
         player = @player.board.cells
         cpu = @cpu.board.cells
-        unfired_at = player.keys - @cpu.shots
+        unfired_at = player.keys - @cpu.shots_taken
         cpu_input = unfired_at.sample
 
-        @player.shots << input
+        @player.shots_taken << input
         cpu[input].fire_upon
 
         report_results(cpu, input)
@@ -68,12 +65,12 @@ class Game
         end
 
         cpu_shot = player[cpu_input].fire_upon
-        @cpu.shots << cpu_input
+        @cpu.shots_taken << cpu_input
 
         report_results(player, cpu_input)
 
         break
-      elsif @player.shots.include?(input)
+      elsif @player.shots_taken.include?(input)
         puts "You already fired at #{input}!"
         print "Please enter a valid coordinate:\n>  "
       else

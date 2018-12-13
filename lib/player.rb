@@ -2,14 +2,14 @@ class Player
 
   attr_reader :board,
               :ships,
-              :shots
+              :shots_taken
 
   def initialize
     @board = Board.new
     @cruiser = Ship.new("Cruiser", 3)
     @sub = Ship.new("Submarine", 2)
     @ships = [@cruiser, @sub]
-    @shots = []
+    @shots_taken = []
   end
 
   def customize_board(height, width)

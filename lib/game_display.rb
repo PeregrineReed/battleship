@@ -69,11 +69,14 @@ module GameDisplay
   end
 
   def display_boards
-    #variable '=' based on board size
     header = @cpu.board.cells.values.last.coordinate[1..-1].to_i
-    puts "#{'=' * (@cpu.board.cells.values.last.coordinate[1..-1].to_i + 6)}COMPUTER BOARD#{'=' * (@cpu.board.cells.values.last.coordinate[1..-1].to_i + 6)}"
+    print '=' * (header + 6)
+    print "COMPUTER BOARD"
+    print '=' * (header + 6) + "\n"
     puts @cpu.board.render
-    puts "#{'=' * (@cpu.board.cells.values.last.coordinate[1..-1].to_i + 7)}PLAYER BOARD#{'=' * (@cpu.board.cells.values.last.coordinate[1..-1].to_i + 7)}"
+    print '=' * (header + 7)
+    print "PLAYER BOARD"
+    print '=' * (header + 7) + "\n"
     puts @player.board.render(true)
     print "Enter the coordinate for your shot:\n>  "
     shots_fired
