@@ -2,6 +2,8 @@ require 'minitest/autorun'
 require 'minitest/pride'
 require './lib/ship'
 require './lib/cell'
+require './lib/cell_generator'
+require './lib/placement_validation'
 require './lib/board'
 
 class BoardTest < Minitest::Test
@@ -74,9 +76,22 @@ class BoardTest < Minitest::Test
   end
 
   def test_it_can_render_cells
-    assert_equal "  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n", @board.render
+    empty_board = "  1  2  3  4 \n" +
+                  "A .  .  .  . \n" +
+                  "B .  .  .  . \n" +
+                  "C .  .  .  . \n" +
+                  "D .  .  .  . \n"
+
+    ship_board = "  1  2  3  4 \n" +
+                 "A S  S  S  . \n" +
+                 "B .  .  .  . \n" +
+                 "C .  .  .  . \n" +
+                 "D .  .  .  . \n"
+
+
+    assert_equal empty_board, @board.render
     @board.place(@cruiser, ["A1", "A2", "A3"])
-    assert_equal "  1 2 3 4 \nA S S S . \nB . . . . \nC . . . . \nD . . . . \n", @board.render(true)
+    assert_equal ship_board, @board.render(true)
   end
 
 end

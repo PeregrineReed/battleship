@@ -2,18 +2,18 @@ class Computer
 
   attr_reader :board,
               :ships,
-              :shots
+              :shots_taken
 
   def initialize
     @board = Board.new
     @cruiser = Ship.new("Cruiser", 3)
     @sub = Ship.new("Submarine", 2)
     @ships = [@cruiser, @sub]
-    @shots = []
+    @shots_taken = []
   end
 
-  def customize_board(width, height)
-    @board = Board.new(width: width, height: height)
+  def customize_board(height, width)
+    @board = Board.new(height: height, width: width)
   end
 
   def health
@@ -24,52 +24,32 @@ class Computer
   end
 
   def setup
-    occupied_spaces = []
+    all_rows = @board.cells.values.group_by do |cell|
+      cell.coordinate[0]
+    end
+
+    all_columns = @board.cells.values.group_by do |cell|
+      cell.coordinate[1..-1]
+    end
+    axes = [all_rows, all_columns]
+
     @ships.each do |ship|
-      open_spaces = @board.cells.keys - occupied_spaces
-      random_coordinate = open_spaces.sample
-      axes = [horizontal(random_coordinate), vertical(random_coordinate)]
-      ship_placement = []
-
-      until @board.valid_placement?(ship, ship_placement)
-        if ship_placement.length >= ship.length
-          ship_placement.clear
-          random_coordinate = open_spaces.sample
-          axes = [horizontal(random_coordinate), vertical(random_coordinate)]
+      loop do
+        axis = axes.sample.values.shuffle
+        cell = axis.first.shuffle[0]
+        placement = nil
+        axis.first.each_cons(ship.length) do |cells|
+          placement = cells if cells.include?(cell)
         end
-        axis = axes.sample
-        axis.each do |coordinate|
-          unless occupied_spaces.include?(coordinate) || ship_placement.length >= ship.length
-            ship_placement << coordinate
-          end
+        coordinates = placement.map do |cell|
+          cell.coordinate
         end
-        ship_placement.sort!
-      end
-      @board.place(ship, ship_placement)
-        ship_placement.each do |coordinate|
-          occupied_spaces << coordinate
+        if @board.valid_placement?(ship, coordinates)
+          @board.place(ship, coordinates)
+          break
         end
-    end
-  end
-
-  def horizontal(random_coordinate)
-    valid_horizontal_placements = []
-    @board.cells.keys.each do |coordinate|
-      if coordinate[0] == random_coordinate[0]
-         valid_horizontal_placements << coordinate
       end
     end
-    valid_horizontal_placements.shuffle
-  end
-
-  def vertical(random_coordinate)
-    valid_vertical_placements = []
-    @board.cells.keys.each do |coordinate|
-      if coordinate[1..-1] == random_coordinate[1..-1]
-          valid_vertical_placements << coordinate
-      end
-    end
-    valid_vertical_placements.shuffle
   end
 
 end
