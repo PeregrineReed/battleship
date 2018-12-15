@@ -19,11 +19,11 @@ class Game
     turn
   end
 
-
   def turn
     loop do
       if end_game?
         end_game
+        restart
         break
       end
       display_boards
@@ -38,10 +38,7 @@ class Game
     end
   end
 
-
-  def end_game
-    puts "You won!" if @cpu.health == 0
-    puts "I won!" if @player.health == 0
+  def restart
     @player = Player.new
     @cpu = Computer.new
   end
@@ -70,12 +67,26 @@ class Game
         report_results(player, cpu_input)
 
         break
-      elsif @player.shots_taken.include?(input)
-        puts "You already fired at #{input}!"
-        print "Please enter a valid coordinate:\n>  "
       else
-        print "Please enter a valid coordinate:\n>  "
+        already_fired_at?(input)
       end
+    end
+  end
+
+  def hit?(board, cell)
+    if board == @cpu.board.cells
+      current_player = "You"
+      opposing_player = "my"
+    elsif board == @player.board.cells
+      current_player = "I"
+      opposing_player = "your"
+    end
+    if board[cell].empty?
+    "miss."
+    elsif board[cell].empty? == false && board[cell].ship.health > 0
+      "hit."
+    elsif board[cell].empty? == false && board[cell].ship.health == 0
+      "hit!\n#{current_player} sunk #{opposing_player} battleship!"
     end
   end
 

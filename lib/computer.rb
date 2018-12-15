@@ -1,5 +1,7 @@
 class Computer
 
+  include Stats
+
   attr_reader :board,
               :ships,
               :shots_taken
@@ -12,25 +14,19 @@ class Computer
     @shots_taken = []
   end
 
-  def customize_board(height, width)
-    @board = Board.new(height: height, width: width)
-  end
-
-  def health
-    ships = @ships.map do |ship|
-      ship.health
-    end
-    ships.sum
-  end
-
-  def setup
+  def all_rows
     all_rows = @board.cells.values.group_by do |cell|
       cell.coordinate[0]
     end
+  end
 
+  def all_columns
     all_columns = @board.cells.values.group_by do |cell|
       cell.coordinate[1..-1]
     end
+  end
+
+  def setup
     axes = [all_rows, all_columns]
 
     @ships.each do |ship|

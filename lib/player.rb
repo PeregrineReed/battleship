@@ -1,5 +1,7 @@
 class Player
 
+  include Stats
+
   attr_reader :board,
               :ships,
               :shots_taken
@@ -10,17 +12,6 @@ class Player
     @sub = Ship.new("Submarine", 2)
     @ships = [@cruiser, @sub]
     @shots_taken = []
-  end
-
-  def customize_board(height, width)
-    @board = Board.new(height: height, width: width)
-  end
-
-  def health
-    ships = @ships.map do |ship|
-      ship.health
-    end
-    ships.sum
   end
 
   def place_ships

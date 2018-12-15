@@ -5,14 +5,14 @@ module GameDisplay
     loop do
       if failed_starts.length > 9
         puts "\n\n\nAre you having trouble with your keyboard?\n\nDO YOU WANT TO PLAY BATTLESHIP?\n\nENTER P TO PLAY OR Q TO QUIT\n"
-        input = gets.chomp.downcase
+        select = input.downcase
       else
         puts "\n\n\nWelcome to BATTLESHIP\n\nEnter p to play or q to quit\n"
-        input = gets.chomp.downcase
+        select = input.downcase
       end
-      if input == 'p' || input == 'play'
+      if select == 'p' || select == 'play'
         setup
-      elsif input == 'q' || input == 'quit'
+      elsif select == 'q' || select == 'quit'
         break
       else
         failed_starts << input
@@ -20,18 +20,22 @@ module GameDisplay
     end
   end
 
+  def input
+    user_input = gets.chomp
+  end
+
   def generate_boards
     height = 4
     width = 4
     loop do
       print "Would you like to choose the board size? (y/n)\n>  "
-      select = gets.chomp.downcase
+      select = input.downcase
       if select == 'y' || select == 'yes'
         loop do
           print "Select board width (minimum 4, maximum 26):\n>  "
-          width = gets.chomp.to_i
+          width = input.to_i
           print "Select board height (minimum 4, maximum 26):\n>  "
-          height = gets.chomp.to_i
+          height = input.to_i
           if (width < 4 || height < 4) || (width > 26 || height > 26)
             puts "Sorry, those dimensions are invalid. Please enter a valid board size."
           else
@@ -82,6 +86,14 @@ module GameDisplay
     shots_fired
   end
 
+  def already_fired_at?(cell)
+    if @player.shots_taken.include?(cell)
+      print "You already fired at #{cell}!\nPlease enter a valid coordinate:\n>  "
+    else
+      print "Please enter a valid coordinate:\n>  "
+    end
+  end
+
   def report_results(board, cell)
     if board == @cpu.board.cells
       current_player = "Your"
@@ -92,21 +104,9 @@ module GameDisplay
     puts "#{current_player} shot on #{cell} was a #{hit?(board, cell)}"
   end
 
-  def hit?(board, cell)
-    if board == @cpu.board.cells
-      current_player = "You"
-      opposing_player = "my"
-    elsif board == @player.board.cells
-      current_player = "I"
-      opposing_player = "your"
-    end
-    if board[cell].empty?
-    "miss."
-    elsif board[cell].empty? == false && board[cell].ship.health > 0
-      "hit."
-    elsif board[cell].empty? == false && board[cell].ship.health == 0
-      "hit!\n#{current_player} sunk #{opposing_player} battleship!"
-    end
+  def end_game
+    puts "You won!" if @cpu.health == 0
+    puts "I won!" if @player.health == 0
   end
 
 end
